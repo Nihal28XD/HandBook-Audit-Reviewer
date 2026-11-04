@@ -12,9 +12,8 @@ import math
 import io
 import base64
 import json
-import html
 
-# ─── STREAMLIT PAGE CONFIG & ENTERPRISE LIGHT THEME ───
+# ─── STREAMLIT PAGE CONFIG & ENTERPRISE CSS ───
 st.set_page_config(
     page_title="RBI Handbook Enterprise Audit & Verification Suite",
     page_icon="📊",
@@ -24,454 +23,15 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* ─── Modern Light Enterprise Palette ─── */
-    :root {
-        --main-bg: #F5F7FB;
-        --sidebar-bg: #FFFFFF;
-        --card-bg: #FFFFFF;
-        --primary-btn: #2563EB;
-        --primary-btn-text: #FFFFFF;
-        --primary-btn-hover: #1D4ED8;
-        --secondary-btn: #E8EEF8;
-        --secondary-btn-text: #1E293B;
-        --secondary-btn-hover: #D9E2EF;
-        --text-main: #172B4D;
-        --text-secondary: #475569;
-        --border-color: #D9E2EF;
-        --border-hover: #CBD5E1;
-        --table-header: #E2E8F0;
-        --table-header-text: #172B4D;
-        --table-header-border: #CBD5E1;
-        --table-body-text: #1E293B;
-        --table-row: #FFFFFF;
-        --table-row-alt: #F8FAFC;
-        --table-border: #CBD5E1;
-        --table-row-hover: #EDF4FF;
-        --warning-bg: #FFF0B3;
-        --warning-text: #78350F;
-        --warning-border: #FDE68A;
-        --warning-icon: #B45309;
-        --error-bg: #FCE4E4;
-        --error-text: #991B1B;
-        --error-border: #FECACA;
-        --error-icon: #DC2626;
-        --success-bg: #DCFCE7;
-        --success-text: #166534;
-        --info-bg: #EFF6FF;
-        --info-text: #1E3A8A;
+    .main { background-color: #F8F9FA; } 
+        color: white;
+        font-weight: 600;
+        border-radius: 6px;
+        padding: 0.6rem 1.2rem;
+        border: none;
     }
-
-    /* ─── Global Background & Typography ─── */
-    .stApp {
-        background-color: var(--main-bg) !important;
-        color: var(--text-main) !important;
-    }
-
-    /* ─── Sidebar Styling ─── */
-    [data-testid="stSidebar"] {
-        background-color: var(--sidebar-bg) !important;
-        border-right: 1px solid var(--border-color) !important;
-    }
-    [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2,
-    [data-testid="stSidebar"] h3,
-    [data-testid="stSidebar"] h4 {
-        color: var(--text-main) !important;
-        font-weight: 700 !important;
-    }
-    [data-testid="stSidebar"] p,
-    [data-testid="stSidebar"] span,
-    [data-testid="stSidebar"] label {
-        color: var(--text-secondary) !important;
-    }
-
-    /* ─── Headings & Body Text ─── */
-    h1, h2, h3, h4, h5, h6 {
-        color: var(--text-main) !important;
-        font-weight: 700 !important;
-    }
-    p, span, label {
-        color: var(--text-secondary);
-    }
-    hr {
-        border-color: var(--border-color) !important;
-    }
-
-    /* ─── File Uploader Section ─── */
-    [data-testid="stFileUploader"] {
-        background-color: var(--card-bg) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 8px !important;
-        padding: 0.85rem !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
-    }
-
-    [data-testid="stFileUploader"] label {
-        color: var(--text-main) !important;
-        font-weight: 600 !important;
-        font-size: 0.9rem !important;
-    }
-
-    /* File Uploader Dropzone */
-    [data-testid="stFileUploader"] section,
-    [data-testid="stFileUploaderDropzone"],
-    [data-testid="stFileUploadDropzone"] {
-        background-color: #F8FAFC !important;
-        border: 2px dashed var(--border-color) !important;
-        border-radius: 8px !important;
-        padding: 1rem !important;
-        transition: all 0.15s ease !important;
-    }
-
-    [data-testid="stFileUploader"] section:hover,
-    [data-testid="stFileUploaderDropzone"]:hover,
-    [data-testid="stFileUploadDropzone"]:hover {
-        border-color: var(--primary-btn) !important;
-        background-color: #F1F5F9 !important;
-    }
-
-    /* File uploader instructions text */
-    [data-testid="stFileUploader"] section span,
-    [data-testid="stFileUploader"] section small,
-    [data-testid="stFileUploader"] section div {
-        color: var(--text-secondary) !important;
-        font-weight: 500 !important;
-    }
-
-    /* Browse Files Button */
-    [data-testid="stFileUploader"] section button,
-    [data-testid="stFileUploader"] [data-testid="baseButton-secondary"] {
-        background-color: var(--secondary-btn) !important;
-        color: var(--secondary-btn-text) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 6px !important;
-        font-weight: 600 !important;
-        font-size: 0.875rem !important;
-        padding: 0.45rem 1rem !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
-        transition: all 0.15s ease !important;
-    }
-
-    [data-testid="stFileUploader"] section button:hover,
-    [data-testid="stFileUploader"] [data-testid="baseButton-secondary"]:hover {
-        background-color: var(--secondary-btn-hover) !important;
-        color: var(--text-main) !important;
-        border-color: var(--primary-btn) !important;
-    }
-
-    /* Uploaded File Item Details */
-    [data-testid="stFileUploader"] ul {
-        background-color: var(--card-bg) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 6px !important;
-        margin-top: 0.5rem !important;
-        padding: 0.4rem 0.65rem !important;
-    }
-
-    [data-testid="stFileUploader"] li,
-    [data-testid="stFileUploader"] li div,
-    [data-testid="stFileUploader"] li span {
-        color: var(--text-main) !important;
-        font-weight: 500 !important;
-    }
-
-    [data-testid="stFileUploader"] li small {
-        color: var(--text-secondary) !important;
-    }
-
-    /* Remove File Button */
-    [data-testid="stFileUploader"] button[aria-label="Delete file"],
-    [data-testid="stFileUploader"] button[data-testid="stFileUploaderDeleteBtn"] {
-        background: transparent !important;
-        border: none !important;
-        color: var(--error-text) !important;
-    }
-
-    [data-testid="stFileUploader"] button[aria-label="Delete file"]:hover,
-    [data-testid="stFileUploader"] button[data-testid="stFileUploaderDeleteBtn"]:hover {
-        background-color: var(--error-bg) !important;
-        color: var(--error-text) !important;
-        border-radius: 4px !important;
-    }
-
-    /* ─── Checkbox Inputs ─── */
-    [data-testid="stCheckbox"] label span {
-        color: var(--text-main) !important;
-        font-weight: 500 !important;
-    }
-
-    /* ─── Metric Cards ─── */
-    [data-testid="stMetric"] {
-        background-color: var(--card-bg) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 8px !important;
-        padding: 1.15rem 1.25rem !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    }
-
-    [data-testid="stMetricLabel"] p,
-    [data-testid="stMetricLabel"] div {
-        color: var(--text-secondary) !important;
-        font-weight: 600 !important;
-        font-size: 0.8rem !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.03em !important;
-    }
-
-    [data-testid="stMetricValue"] div {
-        color: var(--text-main) !important;
-        font-weight: 800 !important;
-        font-size: 1.85rem !important;
-    }
-
-    /* ─── Standard Buttons ─── */
-    div.stButton > button {
-        background-color: var(--primary-btn) !important;
-        color: var(--primary-btn-text) !important;
-        font-weight: 600 !important;
-        border-radius: 6px !important;
-        padding: 0.6rem 1.25rem !important;
-        border: 1px solid var(--primary-btn) !important;
-        transition: all 0.15s ease !important;
-        box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25) !important;
-    }
-
     div.stButton > button:hover {
-        background-color: var(--primary-btn-hover) !important;
-        color: var(--primary-btn-text) !important;
-        border-color: var(--primary-btn-hover) !important;
-        box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35) !important;
-    }
-
-    div.stButton > button:focus {
-        outline: 2px solid var(--primary-btn) !important;
-        outline-offset: 2px !important;
-    }
-
-    /* ─── Download Buttons ─── */
-    div.stDownloadButton > button {
-        background-color: var(--secondary-btn) !important;
-        color: var(--secondary-btn-text) !important;
-        font-weight: 600 !important;
-        border-radius: 6px !important;
-        padding: 0.65rem 1.25rem !important;
-        border: 1px solid var(--border-color) !important;
-        transition: all 0.15s ease !important;
-    }
-
-    div.stDownloadButton > button:hover {
-        background-color: var(--secondary-btn-hover) !important;
-        color: var(--text-main) !important;
-        border-color: var(--primary-btn) !important;
-    }
-
-    div.stDownloadButton > button:focus {
-        outline: 2px solid var(--primary-btn) !important;
-        outline-offset: 2px !important;
-    }
-
-    /* ─── Tables & DataFrames ─── */
-    .audit-table-wrapper {
-        width: 100% !important;
-        margin-top: 6px !important;
-        margin-bottom: 24px !important;
-        border: 1px solid var(--table-border) !important;
-        border-radius: 6px !important;
-        overflow-x: auto !important;
-        background-color: var(--table-row) !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
-    }
-
-    table,
-    table.audit-table,
-    [data-testid="stTable"] table {
-        color: var(--table-body-text) !important;
-        background-color: var(--table-row) !important;
-        border-collapse: collapse !important;
-        width: 100% !important;
-        text-align: left !important;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-    }
-
-    th,
-    table.audit-table th,
-    [data-testid="stTable"] th {
-        background-color: var(--table-header) !important;
-        color: var(--table-header-text) !important;
-        font-weight: 700 !important;
-        border: 1px solid var(--table-header-border) !important;
-        padding: 10px 14px !important;
-        font-size: 0.875rem !important;
-        letter-spacing: 0.01em !important;
-        text-align: left !important;
-        white-space: nowrap !important;
-    }
-
-    td,
-    table.audit-table td,
-    [data-testid="stTable"] td {
-        color: var(--table-body-text) !important;
-        background-color: var(--table-row) !important;
-        border: 1px solid var(--table-border) !important;
-        padding: 9px 14px !important;
-        font-size: 0.875rem !important;
-        vertical-align: top !important;
-        line-height: 1.45 !important;
-    }
-
-    tr:nth-child(even) td,
-    table.audit-table tr:nth-child(even) td,
-    [data-testid="stTable"] tr:nth-child(even) td {
-        background-color: var(--table-row-alt) !important;
-    }
-
-    tr:hover td,
-    table.audit-table tr:hover td,
-    .audit-row:hover td,
-    [data-testid="stTable"] tr:hover td {
-        background-color: var(--table-row-hover) !important;
-    }
-
-    [data-testid="stDataFrame"],
-    [data-testid="stDataFrameResizable"] {
-        border: 1px solid var(--table-border) !important;
-        border-radius: 6px !important;
-        background-color: var(--card-bg) !important;
-        width: 100% !important;
-        margin-top: 6px !important;
-        margin-bottom: 24px !important;
-    }
-
-    /* ─── Alerts & Status Messages ─── */
-    [data-testid="stAlert"] {
-        border-radius: 6px !important;
-        padding: 0 !important;
-        margin-bottom: 0px !important;
-    }
-
-    /* Red Discrepancy Heading (Error) */
-    div.stAlert:has([data-testid="stNotificationContentError"]),
-    div[data-testid="stAlert"]:has([data-testid="stNotificationContentError"]),
-    div[data-testid="stAlert"] div[data-baseweb="notification"][kind="negative"],
-    div.stAlert div[data-baseweb="notification"][kind="negative"],
-    div[data-baseweb="notification"][kind="negative"],
-    div.stAlert:has([aria-label="error"]) {
-        background-color: var(--error-bg) !important;
-        color: var(--error-text) !important;
-        border: 1px solid var(--error-border) !important;
-        border-radius: 6px !important;
-        padding: 10px 16px !important;
-        margin: 0 !important;
-    }
-
-    div[data-baseweb="notification"][kind="negative"] p,
-    div[data-baseweb="notification"][kind="negative"] span,
-    div[data-baseweb="notification"][kind="negative"] div,
-    div[data-baseweb="notification"][kind="negative"] [data-testid="stMarkdownContainer"] p,
-    div[data-testid="stNotificationContentError"] p,
-    div[data-testid="stNotificationContentError"] span,
-    div[data-testid="stNotificationContentError"] div {
-        color: var(--error-text) !important;
-        font-weight: 600 !important;
-        font-size: 0.95rem !important;
-    }
-
-    div[data-baseweb="notification"][kind="negative"] svg,
-    div[data-testid="stAlert"]:has([data-testid="stNotificationContentError"]) svg,
-    div[data-testid="stNotificationContentError"] svg,
-    div[data-testid="stAlertDynamicIcon"] svg,
-    div[data-baseweb="notification"][kind="negative"] [data-testid="stAlertDynamicIcon"] {
-        color: var(--error-icon) !important;
-        fill: var(--error-icon) !important;
-    }
-
-    /* Yellow Warning Heading */
-    div.stAlert:has([data-testid="stNotificationContentWarning"]),
-    div[data-testid="stAlert"]:has([data-testid="stNotificationContentWarning"]),
-    div[data-testid="stAlert"] div[data-baseweb="notification"][kind="warning"],
-    div.stAlert div[data-baseweb="notification"][kind="warning"],
-    div[data-baseweb="notification"][kind="warning"],
-    div.stAlert:has([aria-label="warning"]) {
-        background-color: var(--warning-bg) !important;
-        color: var(--warning-text) !important;
-        border: 1px solid var(--warning-border) !important;
-        border-radius: 6px !important;
-        padding: 10px 16px !important;
-        margin: 0 !important;
-    }
-
-    div[data-baseweb="notification"][kind="warning"] p,
-    div[data-baseweb="notification"][kind="warning"] span,
-    div[data-baseweb="notification"][kind="warning"] div,
-    div[data-baseweb="notification"][kind="warning"] [data-testid="stMarkdownContainer"] p,
-    div[data-testid="stNotificationContentWarning"] p,
-    div[data-testid="stNotificationContentWarning"] span,
-    div[data-testid="stNotificationContentWarning"] div {
-        color: var(--warning-text) !important;
-        font-weight: 600 !important;
-        font-size: 0.95rem !important;
-    }
-
-    div[data-baseweb="notification"][kind="warning"] svg,
-    div[data-testid="stAlert"]:has([data-testid="stNotificationContentWarning"]) svg,
-    div[data-testid="stNotificationContentWarning"] svg,
-    div[data-testid="stAlertDynamicIcon"] svg,
-    div[data-baseweb="notification"][kind="warning"] [data-testid="stAlertDynamicIcon"] {
-        color: var(--warning-icon) !important;
-        fill: var(--warning-icon) !important;
-    }
-
-    /* Success alert (pale green background with dark green text) */
-    div.stAlert:has([data-testid="stNotificationContentSuccess"]),
-    div[data-testid="stAlert"]:has([data-testid="stNotificationContentSuccess"]),
-    div[data-baseweb="notification"][kind="positive"] {
-        background-color: var(--success-bg) !important;
-        color: var(--success-text) !important;
-        border: 1px solid #BBF7D0 !important;
-        border-radius: 6px !important;
-        padding: 10px 16px !important;
-    }
-
-    /* Info alert (pale blue background with dark blue text) */
-    div.stAlert:has([data-testid="stNotificationContentInfo"]),
-    div[data-testid="stAlert"]:has([data-testid="stNotificationContentInfo"]),
-    div[data-baseweb="notification"][kind="info"] {
-        background-color: var(--info-bg) !important;
-        color: var(--info-text) !important;
-        border: 1px solid #BFDBFE !important;
-        border-radius: 6px !important;
-        padding: 10px 16px !important;
-    }
-
-    /* Ensure text inside alert boxes inherits correct contrast color */
-    [data-testid="stAlert"] p,
-    [data-testid="stAlert"] span,
-    [data-testid="stAlert"] div {
-        color: inherit !important;
-        font-weight: 500 !important;
-    }
-
-    /* ─── Tooltips ─── */
-    div[data-baseweb="tooltip"],
-    div[role="tooltip"] {
-        background-color: #1E293B !important;
-        color: #FFFFFF !important;
-        border-radius: 6px !important;
-        font-size: 0.8rem !important;
-        padding: 6px 10px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15) !important;
-    }
-
-    div[data-baseweb="tooltip"] * {
-        color: #FFFFFF !important;
-    }
-
-    div[data-baseweb="popover"] {
-        background-color: #FFFFFF !important;
-        color: var(--text-main) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        background-color: #1D4ED8;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -864,48 +424,25 @@ if excel_file and pdf_file:
 
             st.markdown("---")
 
-            def render_discrepancy_table(df):
-                if df is None or df.empty:
-                    return
-                cols = df.columns.tolist()
-                header_th = "".join([
-                    f'<th style="background-color: #E2E8F0 !important; color: #172B4D !important; font-weight: 700 !important; border: 1px solid #CBD5E1 !important; padding: 10px 14px !important; text-align: left; font-size: 0.875rem !important; white-space: nowrap !important; letter-spacing: 0.01em !important;">{html.escape(str(c))}</th>'
-                    for c in cols
-                ])
-                rows_tr = []
-                for row_idx, row in enumerate(df.itertuples(index=False)):
-                    row_bg = "#FFFFFF" if row_idx % 2 == 0 else "#F8FAFC"
-                    tds = []
-                    for val in row:
-                        v_str = "" if val is None or (isinstance(val, float) and pd.isna(val)) else str(val)
-                        safe_val = html.escape(v_str).replace('\n', '<br>')
-                        tds.append(
-                            f'<td style="background-color: inherit; color: #1E293B !important; border: 1px solid #CBD5E1 !important; padding: 9px 14px !important; font-size: 0.875rem !important; vertical-align: top !important; line-height: 1.45 !important;">{safe_val}</td>'
-                        )
-                    rows_tr.append(f'<tr class="audit-row" style="background-color: {row_bg};">{"".join(tds)}</tr>')
-                rows_html = "".join(rows_tr)
-                table_html = f'<div class="audit-table-wrapper"><table class="audit-table"><thead><tr>{header_th}</tr></thead><tbody>{rows_html}</tbody></table></div>'
-                st.markdown(table_html, unsafe_allow_html=True)
-
             # ─── DISCREPANCY LOGS DISPLAYED FIRST ───
             st.markdown("### 📋 Detailed Audit Discrepancy Logs")
             st.markdown("Review all identified discrepancies categorized by issue type before publishing.")
             
             if case_mismatches:
                 st.error("🚨 Case Sensitivity Mismatches")
-                render_discrepancy_table(pd.DataFrame(case_mismatches).drop_duplicates())
+                st.dataframe(pd.DataFrame(case_mismatches).drop_duplicates(), use_container_width=True)
 
             if table_name_mismatches:
                 st.error("🚨 Mismatched or Incorrect Table / Sheet Names")
-                render_discrepancy_table(pd.DataFrame(table_name_mismatches).drop_duplicates())
+                st.dataframe(pd.DataFrame(table_name_mismatches).drop_duplicates(), use_container_width=True)
 
             if missing_excel_items:
                 st.error("🚨 Missing Words / Numbers / Sentence Errors in PDF")
-                render_discrepancy_table(pd.DataFrame(missing_excel_items).drop_duplicates())
+                st.dataframe(pd.DataFrame(missing_excel_items).drop_duplicates(), use_container_width=True)
 
             if unrecognized_pdf_words:
                 st.warning("⚠️ Unrecognized / Extra Words in PDF")
-                render_discrepancy_table(pd.DataFrame(unrecognized_pdf_words).drop_duplicates(subset=["Page Number", "Unrecognized Word in PDF"]))
+                st.dataframe(pd.DataFrame(unrecognized_pdf_words).drop_duplicates(subset=["Page Number", "Unrecognized Word in PDF"]), use_container_width=True)
 
             if total_discrepancies == 0:
                 st.balloons()
@@ -934,6 +471,7 @@ if excel_file and pdf_file:
                     sheet_grid.append(row_data)
                 
                 sheets_data[s_name] = sheet_grid
+                # Worksheet tabs are created safely in JavaScript below.
 
             sheets_json_str = json.dumps(sheets_data)
             first_sheet_name = wb.sheetnames[0]
@@ -942,42 +480,39 @@ if excel_file and pdf_file:
             <!DOCTYPE html>
             <html>
             <head>
-                <meta charset="utf-8" />
                 <title>RBI Handbook 50/50 Fully Interactive Comparison Workspace</title>
                 <!-- Handsontable CSS & JS -->
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@14.6.1/dist/handsontable.full.min.css" />
                 <script src="https://cdn.jsdelivr.net/npm/handsontable@14.6.1/dist/handsontable.full.min.js"></script>
                 <style>
                     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-                    body {{ display: flex; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0F172A; overflow: hidden; }}
+                    body {{ display: flex; height: 100vh; font-family: 'Segoe UI', Arial, sans-serif; background: #1e1e1e; overflow: hidden; }}
                     .pane {{ width: 50%; height: 100vh; display: flex; flex-direction: column; background: #ffffff; }}
-                    .pdf-pane {{ border-right: 2px solid #D9E2EF; }}
+                    .pdf-pane {{ border-right: 2px solid #333; }}
                     
                     /* PDF Header */
-                    .pane-header-pdf {{ background: #0F294A; color: #ffffff; padding: 10px 18px; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; border-bottom: 1px solid #1E3A8A; }}
-                    .pane-content-pdf {{ flex: 1; overflow: hidden; background: #0b1120; }}
+                    .pane-header-pdf {{ background: #1e293b; color: #ffffff; padding: 10px 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; }}
+                    .pane-content-pdf {{ flex: 1; overflow: hidden; background: #f8fafc; }}
                     iframe {{ width: 100%; height: 100%; border: none; }}
 
                     /* Excel Desktop Theme */
-                    .excel-container {{ display: flex; flex-direction: column; height: 100vh; background: #F5F7FB; }}
-                    .excel-ribbon-top {{ background: #107C41; color: white; padding: 9px 18px; font-size: 13.5px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }}
-                    .excel-ribbon-tabs {{ background: #E8EEF8; border-bottom: 1px solid #D9E2EF; display: flex; padding: 0 12px; font-size: 12px; color: #1E293B; }}
-                    .excel-ribbon-tab {{ padding: 7px 14px; cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; user-select: none; color: #1E293B; }}
-                    .excel-ribbon-tab.active {{ border-bottom: 2px solid #107C41; color: #107C41; background: #FFFFFF; }}
+                    .excel-container {{ display: flex; flex-direction: column; height: 100vh; background: #f3f3f3; }}
+                    .excel-ribbon-top {{ background: #107c41; color: white; padding: 8px 16px; font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }}
+                    .excel-ribbon-tabs {{ background: #f3f3f3; border-bottom: 1px solid #d4d4d4; display: flex; padding: 0 10px; font-size: 12px; color: #444; }}
+                    .excel-ribbon-tab {{ padding: 6px 12px; cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; }}
+                    .excel-ribbon-tab.active {{ border-bottom: 2px solid #107c41; color: #107c41; background: #fff; }}
                     
-                    .excel-formula-bar {{ background: #FFFFFF; border-bottom: 1px solid #D9E2EF; padding: 5px 12px; display: flex; align-items: center; font-size: 12.5px; color: #172B4D; }}
-                    .excel-fx {{ font-weight: bold; color: #475569; margin-right: 10px; font-style: italic; user-select: none; }}
-                    .excel-formula-input {{ flex: 1; border: 1px solid #D9E2EF; border-radius: 4px; padding: 4px 8px; font-size: 12px; color: #172B4D; background: #FFFFFF; outline: none; }}
-                    .excel-formula-input:focus {{ border-color: #107C41; background: #FFFFFF; }}
+                    .excel-formula-bar {{ background: #ffffff; border-bottom: 1px solid #d4d4d4; padding: 4px 10px; display: flex; align-items: center; font-size: 12px; color: #333; }}
+                    .excel-fx {{ font-weight: bold; color: #666; margin-right: 8px; font-style: italic; }}
+                    .excel-formula-input {{ flex: 1; border: 1px solid #d4d4d4; padding: 3px 6px; font-size: 12px; color: #111; }}
 
-                    .excel-grid-container {{ flex: 1 1 auto; min-height: 0; min-width: 0; height: 100%; width: 100%; overflow: auto; background: #FFFFFF; }}
+                    .excel-grid-container {{ flex: 1 1 auto; min-height: 0; min-width: 0; height: 100%; width: 100%; overflow: auto; background: #fff; }}
                     #excel-grid .handsontable {{ width: 100%; }}
                     #excel-grid .wtHolder {{ overflow: auto !important; }}
-                    .grid-error {{ padding: 18px; color: #991B1B; background: #FEE2E2; font: 14px Arial, sans-serif; }}
-                    .excel-footer-tabs {{ background: #F5F7FB; border-top: 1px solid #D9E2EF; min-height: 38px; height: 38px; display: flex; align-items: center; padding: 0 10px; gap: 4px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; flex: 0 0 38px; }}
-                    .excel-sheet-tab {{ background: #E8EEF8; padding: 8px 16px; font-size: 12px; border: 1px solid #D9E2EF; border-bottom: none; border-radius: 4px 4px 0 0; color: #1E293B; cursor: pointer; user-select: none; flex: 0 0 auto; white-space: nowrap; font-weight: 500; transition: all 0.15s ease; }}
-                    .excel-sheet-tab:hover {{ background: #D9E2EF; color: #172B4D; }}
-                    .excel-sheet-tab.active-tab {{ background: #FFFFFF; font-weight: bold; color: #107C41; border-top: 3px solid #107C41; }}
+                    .grid-error {{ padding: 18px; color: #991b1b; background: #fee2e2; font: 14px Arial, sans-serif; }}
+                    .excel-footer-tabs {{ background: #f2f2f2; border-top: 1px solid #d4d4d4; min-height: 36px; height: 36px; display: flex; align-items: center; padding: 0 10px; gap: 4px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; flex: 0 0 36px; }}
+                    .excel-sheet-tab {{ background: #e1e1e1; padding: 7px 14px; font-size: 12px; border: 1px solid #ccc; border-bottom: none; border-radius: 3px 3px 0 0; color: #333; cursor: pointer; user-select: none; flex: 0 0 auto; white-space: nowrap; }}
+                    .excel-sheet-tab.active-tab {{ background: #ffffff; font-weight: bold; color: #107c41; border-top: 2px solid #107c41; }}
                 </style>
             </head>
             <body>
@@ -1011,7 +546,7 @@ if excel_file and pdf_file:
                             <span class="excel-fx">fx</span>
                             <input type="text" id="formula-input" class="excel-formula-input" value="Active Sheet: {first_sheet_name}" readonly>
                         </div>
-                        <div id="excel-grid" class="excel-grid-container"><div style="padding:16px;color:#475569;font:13px Arial,sans-serif;">Loading worksheet…</div></div>
+                        <div id="excel-grid" class="excel-grid-container"><div style="padding:16px;color:#555;font:13px Arial,sans-serif;">Loading worksheet…</div></div>
                         <div id="excel-footer-tabs" class="excel-footer-tabs" aria-label="Excel worksheets"></div>
                     </div>
                 </div>
@@ -1096,6 +631,7 @@ if excel_file and pdf_file:
                         initHandsontable(sheetsData[sheetName]);
                     }}
 
+                    // Build every worksheet tab and initialize after the page loads.
                     window.addEventListener('load', function() {{
                         renderSheetTabs();
                         if (typeof Handsontable === 'undefined') {{
@@ -1105,6 +641,7 @@ if excel_file and pdf_file:
                         switchSheet(currentSheet);
                     }});
 
+                    // Load PDF using Blob URL synchronously
                     const pdfData = "{base64_pdf}";
                     const byteCharacters = atob(pdfData);
                     const byteNumbers = new Array(byteCharacters.length);
@@ -1128,56 +665,17 @@ if excel_file and pdf_file:
             btn_html = f"""
             <!doctype html>
             <html>
-            <head>
-              <meta charset="utf-8" />
-              <style>
-                body {{
-                  margin: 0;
-                  padding: 8px 0;
-                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                  background: transparent;
-                }}
-                #open-workspace {{
-                  padding: 12px 24px;
-                  background-color: #2563EB;
-                  color: #FFFFFF;
-                  border: 1px solid #2563EB;
-                  border-radius: 6px;
-                  font-weight: 600;
-                  font-size: 15px;
-                  cursor: pointer;
-                  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
-                  transition: all 0.15s ease;
-                  display: inline-flex;
-                  align-items: center;
-                  gap: 8px;
-                }}
-                #open-workspace:hover {{
-                  background-color: #1D4ED8;
-                  border-color: #1D4ED8;
-                  color: #FFFFFF;
-                  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35);
-                }}
-                #open-workspace:focus {{
-                  outline: 2px solid #2563EB;
-                  outline-offset: 2px;
-                }}
-                #launch-status {{
-                  margin-left: 12px;
-                  color: #172B4D;
-                  font-size: 13px;
-                  font-weight: 500;
-                }}
-              </style>
-            </head>
-            <body>
-              <button id="open-workspace">
+            <body style="margin:0;padding:8px;font-family:Arial,sans-serif;">
+              <button id="open-workspace"
+                style="padding:14px 22px;background:#2563EB;color:#fff;border:0;
+                       border-radius:8px;font-weight:700;font-size:16px;cursor:pointer;">
                 🖥️ Open 50/50 Side-by-Side Workspace in New Tab
               </button>
-              <span id="launch-status"></span>
+              <span id="launch-status" style="margin-left:12px;color:#444;font-size:13px;"></span>
               <script>
                 const workspaceHTML = atob("{html_base64}");
                 document.getElementById("open-workspace").addEventListener("click", function () {{
+                  // Open the tab directly from the click event to reduce popup blocking.
                   const newTab = window.open("about:blank", "_blank");
                   if (!newTab) {{
                     document.getElementById("launch-status").textContent =
@@ -1194,7 +692,7 @@ if excel_file and pdf_file:
             </html>
             """
 
-            components.html(btn_html, height=65, scrolling=False)
+            components.html(btn_html, height=75, scrolling=False)
 
             # Reliable fallback if the browser blocks popups from embedded components.
             st.download_button(

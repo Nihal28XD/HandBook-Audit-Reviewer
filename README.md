@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📊 RBI Handbook Enterprise Audit & Verification Suite
 
 An enterprise-grade cross-validation and auditing engine designed to verify multi-sheet financial Excel workbooks against final published PDF documents (such as RBI Handbook publications) with native PDF highlight annotations and an interactive side-by-side workspace.
@@ -213,7 +212,3 @@ If you prefer setting up manually without Blueprints:
 | Popup blocked when opening 50/50 workspace | Browser popup blocker preventing `window.open` | Allow popups for the site or click the **Download Interactive 50/50 Workspace (HTML)** fallback button. |
 | Streamlit port error on Render | App attempting to bind to a hardcoded port | Ensure start command uses `--server.port $PORT --server.address 0.0.0.0`. `render.yaml` specifies this automatically. |
 | Memory limit exceeded on Render | Very large PDFs (>500 pages) exceeding free-tier RAM | Split large multi-chapter publications into individual chapter PDFs or upgrade instance RAM on Render. |
-=======
-# HandBook-Audit-Reviewer
-A Streamlit-based RBI Handbook Audit &amp; Verification Suite that validates Excel workbooks against publication PDFs, detects missing or mismatched text and numerical values, identifies discrepancies, highlights PDF content, and provides an interactive side-by-side PDF and Excel review workspace.
->>>>>>> bf1a14007f534345874f406582dd2fb5d36cd051
